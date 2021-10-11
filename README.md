@@ -55,6 +55,5 @@ Once we have the AUTHTOKEN, CHANNEL_ID and TXN_ID, we can now initiate a new str
   
  Once you click record you can start speaking into the mic and Marsview will stream back the realtime analytics of your audio and display it in the appropriate boxes
  
- ## Step 5:
  
 
