@@ -1,12 +1,7 @@
 'use strict';
 
-//  Google Cloud Speech Playground with node.js and socket.io
-//  Created by Vinzenz Aubry for sansho 24.01.17
-//  Feel free to improve!
-//	Contact: v@vinzenzaubry.com
 
 const express = require('express'); // const bodyParser = require('body-parser'); // const path = require('path');
-// Google Cloud
 const app = express();
 const port = process.env.PORT || 1337;
 const server = require('http').createServer(app);
@@ -94,7 +89,7 @@ io.on('connection', function (client) {
   });
 
 });
-// =========================== GOOGLE CLOUD SETTINGS ================================ //
+
 
 // The encoding of the audio file, e.g. 'LINEAR16'
 // The sample rate of the audio file in hertz, e.g. 16000
