@@ -79,5 +79,6 @@ Once we have the AUTHTOKEN, CHANNEL_ID and TXN_ID, we can now initiate a new str
   
  Once you click record you can start speaking into the mic and Marsview will stream back the realtime analytics of your audio and display it in the appropriate boxes
  
+ **note: Audio should be of format LINEAR16 at 16000hz for best performance
  
 
