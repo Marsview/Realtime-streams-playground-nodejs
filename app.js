@@ -13,21 +13,13 @@ const wrap = middleware => (socket, next) => middleware(socket.request, {}, next
 
 const io = require('socket.io')(server);
 
-const mv_io_client = ioClient.connect('https://rtstrdev.marsview.ai/', {
+const mv_io_client = ioClient.connect('https://streams.marsview.ai/', {
   auth: {
-    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ2ZW5rYXRlc2gucHJhc2FkQG1hcnN2aWV3LmFpIiwiaWF0IjoxNjMzOTM5OTY4LCJleHAiOjE2MzM5NDM1Njh9.Uq9jgzrIAICcuaGPOeWOzvpfcQ4LvEYTnCH-XcU0jjA',
-    txnId: 'txn1',
-    channelId: 'ch1'
+    token: '<AUTHTOKEN>',
+    txnId: '<TXN_ID>',
+    channelId: '<CHANNEL_ID>'
   }
 }); // Marsview Realtime Server
-
-// const mv_io_client = ioClient.connect('http://localhost:3030', {
-//   auth: {
-//     token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ2ZW5rYXRlc2gucHJhc2FkQG1hcnN2aWV3LmFpIiwiaWF0IjoxNjMzNTE2Nzg1LCJleHAiOjE2MzM1MjAzODV9.aOyT23hZyDxeX0XpjRm8v5tSiDuXDwMVRRa2VGzN8T4',
-//     txnId: 'txn1',
-//     channelId: 'ch1'
-//   }
-// }); // Marsview Realtime Server
 
 io.use(wrap(session({ secret: "cats" })));
 app.use('/assets', express.static(__dirname + '/public'));
