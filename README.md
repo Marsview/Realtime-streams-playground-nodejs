@@ -73,7 +73,7 @@ Once we have the AUTHTOKEN, CHANNEL_ID and TXN_ID, we can now initiate a new str
   Stage 2: Start the app
   ```$ npm start```
   
-  Stage 3: Navigate to localhost:1337
+  Stage 3: Open cyour web browser (preferrably chrome) and Navigate to localhost:1337
   
   Stage 4: Click on **start recording** button
   
