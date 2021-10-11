@@ -1,0 +1,28 @@
+{
+  "name": "GoogleCloudSpeechPlayground",
+  "version": "1.0.1",
+  "description": "Google Cloud Speech Playground with node.js and socket.io.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app2.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/speech": "^4.2.0",
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.9",
+    "ejs": "^3.1.6",
+    "express": "^4.16.2",
+    "path": "^0.12.7",
+    "socket.io": "^3.1.1",
+    "redis": "^3.1.2",
+    "redis-streams": "^1.1.0",
+    "redis-streams-broker": "0.0.13",
+    "socket.io-client": "^4.1.2",
+    "async": "^3.2.0",
+    "request": "^2.88.2",
+    "express-session": "^1.17.2"
+  }
+}
