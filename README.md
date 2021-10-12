@@ -81,4 +81,7 @@ Once we have the AUTHTOKEN, CHANNEL_ID and TXN_ID, we can now initiate a new str
  
  **note: Audio should be of format LINEAR16 at 16000hz for best performance
  
+ ## Output
+ Attached below a screenshot of the Realtime JSON output.
 
+![Screenshot from 2021-10-12 12-34-43](https://user-images.githubusercontent.com/89686378/136908036-310271cb-52b9-41b2-a719-1feb0dcf1027.png)
