@@ -10,7 +10,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css">
     <link rel="stylesheet" href="https://d1sv72xa22bi8g.cloudfront.net/realtime/style.css">
-    <link rel="stylesheet" href="assets/css/main.css"> 
+    <link rel="stylesheet" href="assets/css/main.css">
 </head>
 
 <body>
@@ -20,8 +20,12 @@
                 <div class="col-12">
                     <h2 class="font-bold font-large">
                         <span>
-                            <img class="marsview-logo" class="img-fluid" src="https://d1sv72xa22bi8g.cloudfront.net/assets_four_zero/logo/logo-white.png">
+                            <img class="marsview-logo" class="img-fluid"
+                                src="https://d1sv72xa22bi8g.cloudfront.net/assets_four_zero/logo/logo-white.png">
                         </span>Streams Playground</h2>
+                    <div class="form-group" style="max-width:450px">
+                        <input class="form-control" type="text" name="token" placeholder="token" id="token">
+                    </div>
                     <div class="buttons-continer mt-3">
                         <button id="startRecButton" type="button" class="btn btn-primary"> Start recording</button>
                         <button id="stopRecButton" type="button" class="btn btn-danger"> Stop recording</button>
@@ -118,7 +122,8 @@
     <script src="assets/js/socket.io.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/autoloader/prism-autoloader.min.js">
+    </script>
 
     <!-- Client -->
     <script src="assets/js/client.js"></script>
