@@ -98,7 +98,7 @@ app.post('/get_credentials', function (req, res) {
   }
 })
 
-app.put("/set_credentials", function(req, res) {
+app.put("/set_credentials", function (req, res) {
   authParams.txnId = txnIdTemp;
   authParams.channelId = channelIdTemp;
   // Initialize mv_io_client object
@@ -106,7 +106,9 @@ app.put("/set_credentials", function(req, res) {
     auth: authParams
   }); // Marsview Realtime Server
   initializeListeners();
-  res.json({status: true});
+  res.json({
+    status: true
+  });
 })
 
 
@@ -126,7 +128,9 @@ io.on('connection', function (clientLocal) {
     console.log("Geetiing messages")
     client.emit('broad', data);
   });
+});
 
+function initializeListeners() {
   client.on('startStream', function (data) {
     mv_io_client.emit('startStream', data)
   });
@@ -138,24 +142,9 @@ io.on('connection', function (clientLocal) {
   client.on('binaryData', function (data) {
     mv_io_client.emit('binaryData', data)
   });
-});
-
-function initializeListeners() {
   mv_io_client.on('messages', function (data) {
-    console.log("Getting meesages")
+    console.log("Getting messages")
     client.emit('messages', data);
-  });
-
-  mv_io_client.on('startStream', function (data) {
-    client.emit('startStream', data)
-  });
-
-  mv_io_client.on('endStream', function () {
-    client.emit('endStream')
-  });
-
-  mv_io_client.on('binaryData', function (data) {
-    client.emit('binaryData', data)
   });
 
   mv_io_client.on('valid-token', function (data) {
