@@ -5,6 +5,7 @@ const express = require('express'); // const bodyParser = require('body-parser')
 const app = express();
 const port = process.env.PORT || 1337;
 const server = require('http').createServer(app);
+const path = require('path');
 
 const ioClient = require('socket.io-client')
 
@@ -24,12 +25,11 @@ const mv_io_client = ioClient.connect('https://streams.marsview.ai/', {
 io.use(wrap(session({ secret: "cats" })));
 app.use('/assets', express.static(__dirname + '/public'));
 app.use('/session/assets', express.static(__dirname + '/public'));
-app.set('view engine', 'ejs');
 
 // =========================== ROUTERS ================================ //
 
 app.get('/', function (req, res) {
-  res.render('index', {});
+  res.sendFile(path.join(__dirname+'/views/index.html'));
 });
 
 app.use('/', function (req, res, next) {

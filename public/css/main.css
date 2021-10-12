@@ -1,6 +1,5 @@
 body {
-    font-family: sans-serif;
-    background-color: rgb(189, 189, 189);
+    padding: 3em 5em !important;
 }
 
 p {
@@ -27,13 +26,13 @@ audio {
     backgorund-color: red;
 }
 
-.wrapper {
-    width: 90vw;
-    margin: 0 auto;
-}
-
 .greyText {
     opacity: 0.4;
+}
+
+.result-container {
+    max-height: 600px !important;
+    overflow: auto !important;
 }
 
 @-webkit-keyframes redGlow {
@@ -103,8 +102,8 @@ audio {
     opacity: 0.2;
 }
 
-h1 {
-    color: black;
+.marsview-logo {
+    max-height: 1.5em;
 }
 
 
