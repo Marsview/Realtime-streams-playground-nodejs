@@ -5,8 +5,6 @@
 let userId = ''
 let socket = io();
 
-socket.connect()
-
 let bufferSize = 2048,
   AudioContext,
   context,
@@ -25,6 +23,13 @@ const constraints = {
   audio: true,
   video: false,
 };
+
+  // Post request configurations
+  let httpConfig = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }
 
 //================= RECORDING =================
 
@@ -64,11 +69,91 @@ function microphoneProcess(e) {
 
 //================= INTERFACE =================
 var startButton = document.getElementById('startRecButton');
-startButton.addEventListener('click', startRecording);
-
+var transButton = document.getElementById('transButton');
 var endButton = document.getElementById('stopRecButton');
+var setButton = document.getElementById('setButton');
+
+function init() {
+  startButton.disabled = true;
+  transButton.disabled = true;
+  endButton.disabled = true;
+  setButton.disabled = true;
+}
+
+init();
+
+// Token form elements
+var tokenForm = document.getElementById('token-form');
+var tokenArea = document.getElementById('tokenarea');
+var tokenButton = document.getElementById('tokenbutton');
+
+// Form submission events
+tokenForm.addEventListener('submit', (event) => {
+  // stop form submission
+  event.preventDefault();
+
+  // Access token required values from form
+  const apikeytemp = tokenForm.elements['apikey'].value;
+  const apisecrettemp = tokenForm.elements['apisecret'].value;
+  const useridtemp = tokenForm.elements['userid'].value;
+
+  tokenArea.value = "Getting token ...";
+
+  // Post request to get the access token
+  axios.post("/get_access_token", {
+      apiKey: apikeytemp,
+      apiSecret: apisecrettemp,
+      userId: useridtemp
+    }, httpConfig)
+    .then(response => {
+      if (response.data.status) {
+        console.log("response", response.data.token)
+        tokenArea.value = response.data.token;
+        tokenButton.disabled = true;
+        transButton.disabled = false;
+      } else {
+        tokenArea.value = response.data.message;
+      }
+    }).catch((err) => {
+      console.log(err)
+    });
+});
+
+// Channel form elements
+var channelForm = document.getElementById('channel-form');
+var channelArea = document.getElementById('channelarea');
+
+channelForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const channelNumber = document.getElementById('channelnumber').value || 1;
+  axios.post("/get_credentials", {
+    channelNumber: channelNumber
+  }, httpConfig).then(response => {
+    if(response.data.status) {
+      channelArea.value = JSON.stringify(response.data, null, 4);
+      setButton.disabled = false;
+      transButton.disabled = true;
+    }
+  })
+});
+
+var setButton = document.getElementById('setButton');
+
+setButton.addEventListener('click', function(event) {
+  event.preventDefault();
+  axios.put("/set_credentials", httpConfig).then(response => {
+    if(response.data.status) {
+      setButton.disabled = true;
+      startButton.disabled = false;
+      document.getElementById('setmessage').innerHTML = 'Connected';
+      socket.connect();
+    }
+  })
+})
+
+// Recording button events
+startButton.addEventListener('click', startRecording);
 endButton.addEventListener('click', stopRecording);
-endButton.disabled = true;
 
 var recordingStatus = document.getElementById('recordingStatus');
 
@@ -103,14 +188,13 @@ function stopRecording() {
 }
 
 
-function invalidToken(){
-  stopRecording()
-  document.getElementById('errorname').innerHTML="This is an invalid token."  
+function invalidToken(message) {
+  document.getElementById('errorname').innerHTML = message
 }
 
-function validToken(){
-  document.getElementById('errorname').innerHTML='Token Valid, start speaking';
-  document.getElementById('errorname').style["color"] = "green"; 
+function validToken() {
+  document.getElementById('errorname').innerHTML = 'Token Valid, start speaking';
+  document.getElementById('errorname').style["color"] = "green";
 }
 
 const results = document.getElementById('results3');
@@ -130,7 +214,7 @@ socket.on('output', function (output) {
 
   console.log("Output more", output_obj)
   results.innerHTML += output_obj;
-  results.innerHTML += "\n============================================\n" ;
+  results.innerHTML += "\n============================================\n";
   resultsContainer.scrollTop = resultsContainer.scrollHeight;
 });
 
