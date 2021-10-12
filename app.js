@@ -16,9 +16,9 @@ const io = require('socket.io')(server);
 
 const mv_io_client = ioClient.connect('https://streams.marsview.ai/', {
   auth: {
-    token: '<AUTHTOKEN>',
-    txnId: '<TXN_ID>',
-    channelId: '<CHANNEL_ID>'
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJkaGFyYW5lZTg2QGdtYWlsLmNvbSIsImlhdCI6MTYzNDAyMTIxOCwiZXhwIjoxNjM0MDI0ODE4fQ.4D2rqH06UeKdC9P-UE44Pl0afjvdcr-oOnq799x3Gwg',
+    txnId: 'txn-7wvkunnnv2n-1634017218575',
+    channelId: 'channel-7wvkunnnv2o-1634017218576'
   }
 }); // Marsview Realtime Server
 
