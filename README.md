@@ -8,7 +8,7 @@ Installing the dependencies for the node.js application
 
 ## Step 2:
 Signup on [Marsview portal](app.marsview.ai) and fetch API Key and API Token
-Update these values in config.py
+Update these values in app.js
 ![IM-1](https://gblobscdn.gitbook.com/assets%2F-MaxSab-_c4clZreM9ft%2F-McUJSnRlslrM7wCcAdb%2F-McUJx4lF7WPJBxCsk4o%2FScreenshot%202021-06-18%20at%207.02.35%20PM.png?alt=media&token=c466bae4-6b04-4b85-b1eb-4ed02a169538)
 
 ## Step 3:
@@ -42,11 +42,11 @@ Use the AUTHTOKEN to Initiate a transaction
 
 ### Request
 ```
-curl -X POST \  https://streams.marsview.ai/rb/v1/streams/setup_realtime_stream \ 
--H 'authorization: Bearer <ATUHTOKEN>' \ 
--H 'cache-control: no-cache' \  
--H 'content-type: application/json' \  
--H 'postman-token: 7ba9b4b9-710a-2aca-a17e-684a0172e0e8' \  
+curl -X POST https://streams.marsview.ai/rb/v1/streams/setup_realtime_stream \
+-H 'authorization: Bearer <ATUHTOKEN>' \
+-H 'cache-control: no-cache' \
+-H 'content-type: application/json' \
+-H 'postman-token: 7ba9b4b9-710a-2aca-a17e-684a0172e0e8' \
 -d '{	"channels":"1"}'
 ```
 ### Response
@@ -66,16 +66,16 @@ curl -X POST \  https://streams.marsview.ai/rb/v1/streams/setup_realtime_stream 
 }
 ```
 ## Step 5:
-Once we have the AUTHTOKEN, CHANNEL_ID and TXN_ID, we can now initiate a new stream.
+Once we have the **AUTHTOKEN**, **CHANNEL_ID** and **TXN_ID**, we can now initiate a new stream.
   
-  Stage 1: Copyt the AUTHTOKEN, CHANNEL_ID and TXN_ID into the javascript file **app.js**
+  **Stage 1:** Copy the **AUTHTOKEN**, **CHANNEL_ID** and **TXN_ID** into the javascript file **app.js**
   
-  Stage 2: Start the app
+  **Stage 2:** Start the app
   ```$ npm start```
   
-  Stage 3: Open cyour web browser (preferably chrome) and Navigate to localhost:1337
+  **Stage 3:** Navigate to http://localhost:1337 on your web browser (Prefer Chrome)
   
-  Stage 4: Click on **start recording** button
+  **Stage 4:** Click on **start recording** button
   
  Once you click record you can start speaking into the mic and Marsview will stream back the realtime analytics of your audio and display it in the appropriate boxes
  
