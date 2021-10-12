@@ -31,8 +31,10 @@ audio {
 }
 
 .result-container {
-    max-height: 600px !important;
     overflow: auto !important;
+    border: none !important;
+    width: 100%;
+    max-height: 600px;
 }
 
 @-webkit-keyframes redGlow {

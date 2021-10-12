@@ -1,17 +1,9 @@
 'use strict';
 
-
-
 //connection to socket
 // const socket = io.connect();
-let token = document.getElementById('token').value
 let userId = ''
-let socket = io({
-  auth: {
-    token: token,
-    userId: userId
-  }
-});
+let socket = io();
 
 socket.connect()
 
@@ -25,7 +17,6 @@ let bufferSize = 2048,
 //vars
 let audioElement = document.querySelector('audio'),
   finalWord = false,
-  resultText = document.getElementById('ResultText'),
   removeLastSentence = true,
   streamStreaming = false;
 
@@ -65,12 +56,9 @@ function initRecording() {
 
 function microphoneProcess(e) {
   var left = e.inputBuffer.getChannelData(0);
+
   // var left16 = convertFloat32ToInt16(left); // old 32 to 16 function
-  console.log("===============================")
-  console.log(left.length)
   var left16 = downsampleBuffer(left, 44100, 16000);
-  console.log(left16)
-  console.log(typeof(left16))
   socket.emit('binaryData', left16);
 }
 
@@ -115,21 +103,18 @@ function stopRecording() {
 }
 
 
-
 function invalidToken(){
   stopRecording()
-  document.getElementById('errorname').innerHTML="this is an invalid Token"  
+  document.getElementById('errorname').innerHTML="This is an invalid token."  
 }
 
 function validToken(){
-  document.getElementById('errorname').innerHTML='<span style="color:green">Token Valid, start speaking</span>'  
+  document.getElementById('errorname').innerHTML='Token Valid, start speaking';
+  document.getElementById('errorname').style["color"] = "green"; 
 }
 
-
-
-const resultpreview = document.getElementById('results');
-const resultpreview2 = document.getElementById('results2');
-const resultpreview3 = document.getElementById('results3');
+const results = document.getElementById('results3');
+const resultsContainer = document.getElementById('result-container');
 
 /**
  * Socket Events
@@ -141,36 +126,12 @@ socket.on('invalid-token', function (data) {
 });
 
 socket.on('output', function (output) {
-  let output_obj = JSON.parse(output)
+  let output_obj = JSON.stringify(JSON.parse(output), null, "\t")
 
-  if(output_obj['sentiment_stream']){
-    let sentiment_op = output_obj['sentiment_stream']['output']
-    console.log('Sentiment:  '+sentiment_op)
-    resultpreview3.innerHTML += "\n" + sentiment_op;
-    const resultscroll1 = document.getElementById('result-container1');
-    resultscroll1.scrollTop = resultscroll1.scrollHeight;
-  }
-
-  if(output_obj['tone_stream']){
-    let tone_op = output_obj['tone_stream']['output']
-    console.log('Tone:  '+tone_op)
-    resultpreview2.innerHTML += "\n" + tone_op;
-    const resultscroll2 = document.getElementById('result-container2');
-    resultscroll2.scrollTop = resultscroll2.scrollHeight;
-  }
-
-  if(output_obj['intent_stream']){
-    let intent_op = output_obj['intent_stream']['output']
-    console.log('Intent:  '+intent_op)
-    resultpreview.innerHTML += "\n" + intent_op;
-    const resultscroll3 = document.getElementById('result-container3');
-    resultscroll3.scrollTop = resultscroll3.scrollHeight;
-  }
-  
-  resultpreview.innerHTML += "============================================\n" ;
-  resultpreview2.innerHTML += "============================================\n" ;
-  resultpreview3.innerHTML += "============================================\n" ;
-
+  console.log("Output more", output_obj)
+  results.innerHTML += output_obj;
+  results.innerHTML += "\n============================================\n" ;
+  resultsContainer.scrollTop = resultsContainer.scrollHeight;
 });
 
 socket.on('valid-token', function (data) {
@@ -187,9 +148,6 @@ socket.on('connect', function (data) {
 socket.on('messages', function (data) {
   // console.log(data);
 });
-
-
-
 
 
 //================= SANTAS HELPERS =================
