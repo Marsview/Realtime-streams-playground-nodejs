@@ -102,7 +102,7 @@ app.put("/set_credentials", function(req, res) {
   authParams.txnId = txnIdTemp;
   authParams.channelId = channelIdTemp;
   // Initialize mv_io_client object
-  const mv_io_client = ioClient.connect('https://streams.marsview.ai/', {
+  mv_io_client = ioClient.connect('https://streams.marsview.ai/', {
     auth: authParams
   }); // Marsview Realtime Server
   initializeListeners(mv_io_client);
