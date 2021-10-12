@@ -105,7 +105,6 @@ app.put("/set_credentials", function(req, res) {
   mv_io_client = ioClient.connect('https://streams.marsview.ai/', {
     auth: authParams
   }); // Marsview Realtime Server
-  initializeListeners(mv_io_client);
   res.json({status: true});
 })
 
@@ -125,38 +124,39 @@ io.on('connection', function (clientLocal) {
   client.on('messages', function (data) {
     client.emit('broad', data);
   });
+
+  if(mv_io_client) {
+    mv_io_client.on('messages', function (data) {
+      console.log("Getting meesages")
+      client.emit('messages', data);
+    });
+  
+    mv_io_client.on('startStream', function (data) {
+      client.emit('startStream', data)
+    });
+  
+    mv_io_client.on('endStream', function () {
+      client.emit('endStream')
+    });
+  
+    mv_io_client.on('binaryData', function (data) {
+      client.emit('binaryData', data)
+    });
+  
+    mv_io_client.on('valid-token', function (data) {
+      client.emit('valid-token', data);
+    });
+  
+    mv_io_client.on('invalid-token', function (data) {
+      console.log("Invalid token")
+      client.emit('invalid-token', data);
+    });
+  
+    mv_io_client.on('output', function (sentiment) {
+      client.emit('output', sentiment)
+    });
+  }
 });
-
-function initializeListeners(clientLocal) {
-  clientLocal.on('messages', function (data) {
-    client.emit('messages', data);
-  });
-
-  clientLocal.on('startStream', function (data) {
-    client.emit('startStream', data)
-  });
-
-  clientLocal.on('endStream', function () {
-    client.emit('endStream')
-  });
-
-  clientLocal.on('binaryData', function (data) {
-    client.emit('binaryData', data)
-  });
-
-  clientLocal.on('valid-token', function (data) {
-    client.emit('valid-token', data);
-  });
-
-  clientLocal.on('invalid-token', function (data) {
-    console.log("Invalid token")
-    client.emit('invalid-token', data);
-  });
-
-  clientLocal.on('output', function (sentiment) {
-    client.emit('output', sentiment)
-  });
-}
 
 
 // The encoding of the audio file, e.g. 'LINEAR16'
