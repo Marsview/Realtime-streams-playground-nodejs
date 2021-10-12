@@ -147,18 +147,24 @@ socket.on('output', function (output) {
     let sentiment_op = output_obj['sentiment_stream']['output']
     console.log('Sentiment:  '+sentiment_op)
     resultpreview3.innerHTML += "\n" + sentiment_op;
+    const resultscroll1 = document.getElementById('result-container1');
+    resultscroll1.scrollTop = resultscroll1.scrollHeight;
   }
 
   if(output_obj['tone_stream']){
     let tone_op = output_obj['tone_stream']['output']
     console.log('Tone:  '+tone_op)
     resultpreview2.innerHTML += "\n" + tone_op;
+    const resultscroll2 = document.getElementById('result-container2');
+    resultscroll2.scrollTop = resultscroll2.scrollHeight;
   }
 
   if(output_obj['intent_stream']){
     let intent_op = output_obj['intent_stream']['output']
     console.log('Intent:  '+intent_op)
     resultpreview.innerHTML += "\n" + intent_op;
+    const resultscroll3 = document.getElementById('result-container3');
+    resultscroll3.scrollTop = resultscroll3.scrollHeight;
   }
   
   resultpreview.innerHTML += "============================================\n" ;
