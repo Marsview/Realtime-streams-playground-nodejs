@@ -14,11 +14,20 @@ const wrap = middleware => (socket, next) => middleware(socket.request, {}, next
 
 const io = require('socket.io')(server);
 
+let model_configs = {
+                        'intent_analysis':{
+                            'intents':
+                                ["intent-bxllq2f7hpkrvtyzi3-1627981197627",
+                                        "intent-bxllq2f7hpkrvtzlkf-1627981226223"]
+                                        }
+                      }
+
 const mv_io_client = ioClient.connect('https://streams.marsview.ai/', {
   auth: {
-    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJkaGFyYW5lZTg2QGdtYWlsLmNvbSIsImlhdCI6MTYzNDAyMTIxOCwiZXhwIjoxNjM0MDI0ODE4fQ.4D2rqH06UeKdC9P-UE44Pl0afjvdcr-oOnq799x3Gwg',
-    txnId: 'txn-7wvkunnnv2n-1634017218575',
-    channelId: 'channel-7wvkunnnv2o-1634017218576'
+    token: '<AUTH TOKEN>',
+    txnId: '<TXN ID>',
+    channelId: '<CHANNEL ID>',
+    'modelConfigs': model_configs
   }
 }); // Marsview Realtime Server
 
