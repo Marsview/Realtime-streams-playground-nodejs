@@ -39,7 +39,26 @@ curl --location --request POST 'https://api.marsview.ai/cb/v1/auth/create_access
 
 ## Step 4:
 Use the AUTHTOKEN to Initiate a transaction
+```
+# config data for intents and statement tag models had to be created and the ids are given here, for which apis are available
 
+Model Configs : 
+
+let model_configs = {
+    "intent_analysis":{
+        "intents":[
+                    //  "intent-1c6q62hzkxj2farq-1640270029382",
+                    //  "intent-1c6q62hzkxj4gm3m-1640273449953"
+                    ]},
+    "custom_statement_tag_analysis":{
+        "statement_tag_ids":[
+            //  "statement-bxllq5imjkx68e6tb-1639493995007",
+            //  "statement-bxllq1zsuzkvuj44go-1636609624728",
+            ],
+        "use_tag_level_threshold":True
+        },
+    }
+```
 ### Request
 ```
 curl -X POST https://streams.marsview.ai/rb/v1/streams/setup_realtime_stream \
@@ -47,7 +66,7 @@ curl -X POST https://streams.marsview.ai/rb/v1/streams/setup_realtime_stream \
 -H 'cache-control: no-cache' \
 -H 'content-type: application/json' \
 -H 'postman-token: 7ba9b4b9-710a-2aca-a17e-684a0172e0e8' \
--d '{	"channels":"1"}'
+-d '{	"channels":"1","modelConfigs":model_configs}'
 ```
 ### Response
 
