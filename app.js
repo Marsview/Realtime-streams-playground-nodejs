@@ -15,12 +15,12 @@ const wrap = middleware => (socket, next) => middleware(socket.request, {}, next
 const io = require('socket.io')(server);
 
 let model_configs = {
-                        'intent_analysis':{
-                            'intents':
-                                ["intent-bxllq2f7hpkrvtyzi3-1627981197627",
-                                        "intent-bxllq2f7hpkrvtzlkf-1627981226223"]
-                                        }
-                      }
+  'intent_analysis': {
+    'intents':
+      ["intent-bxllq2f7hpkrvtyzi3-1627981197627",
+        "intent-bxllq2f7hpkrvtzlkf-1627981226223"]
+  }
+}
 
 const mv_io_client = ioClient.connect('https://streams.marsview.ai/', {
   auth: {
@@ -38,7 +38,7 @@ app.use('/session/assets', express.static(__dirname + '/public'));
 // =========================== ROUTERS ================================ //
 
 app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname+'/views/index.html'));
+  res.sendFile(path.join(__dirname + '/views/index.html'));
 });
 
 app.use('/', function (req, res, next) {
@@ -75,7 +75,7 @@ io.on('connection', function (client) {
   client.on('binaryData', function (data) {
     mv_io_client.emit('binaryData', data)
   });
-  
+
   mv_io_client.on('valid-token', function (data) {
     client.emit('valid-token', data);
   });
