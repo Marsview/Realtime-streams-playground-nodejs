@@ -35,7 +35,8 @@ let channelIdTemp = null;
 let authParams = {
   token: null,
   txnId: null,
-  channelId: null
+  channelId: null,
+  modelConfigs: null,
 }
 
 // =========================== ROUTERS ================================ //
@@ -108,6 +109,7 @@ app.put("/set_credentials", function (req, res) {
   }
   authParams.txnId = txnIdTemp;
   authParams.channelId = channelIdTemp;
+  authParams.modelConfigs = model_configs;
   // Initialize mv_io_client object
   mv_io_client = ioClient.connect('https://streams.marsview.ai/', {
     auth: authParams
