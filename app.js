@@ -6,34 +6,38 @@ const app = express();
 const port = process.env.PORT || 1337;
 const server = require('http').createServer(app);
 const path = require('path');
+const axios = require('axios');
+var bodyParser = require('body-parser')
 
 const ioClient = require('socket.io-client')
-
 const session = require("express-session");
 const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
-
 const io = require('socket.io')(server);
 
-let model_configs = {
-  'intent_analysis': {
-    'intents':
-      ["intent-bxllq2f7hpkrvtyzi3-1627981197627",
-        "intent-bxllq2f7hpkrvtzlkf-1627981226223"]
-  }
-}
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({
+  extended: false
+}))
 
-const mv_io_client = ioClient.connect('https://streams.marsview.ai/', {
-  auth: {
-    token: '<AUTH TOKEN>',
-    txnId: '<TXN ID>',
-    channelId: '<CHANNEL ID>',
-    'modelConfigs': model_configs
-  }
-}); // Marsview Realtime Server
-
-io.use(wrap(session({ secret: "cats" })));
+// parse application/json
+app.use(bodyParser.json())
+io.use(wrap(session({
+  secret: "cats"
+})));
 app.use('/assets', express.static(__dirname + '/public'));
 app.use('/session/assets', express.static(__dirname + '/public'));
+
+// Inital state parameters
+let mv_io_client = null;
+let client = null;
+let txnIdTemp = null;
+let channelIdTemp = null;
+let authParams = {
+  token: null,
+  txnId: null,
+  channelId: null,
+  modelConfigs: null,
+}
 
 // =========================== ROUTERS ================================ //
 
@@ -45,9 +49,82 @@ app.use('/', function (req, res, next) {
   next(); // console.log(`Requests Url: ${req.url}`);
 });
 
+app.post('/get_access_token', function (req, res) {
+  if (req.body) {
+    // Post request configurations
+    let config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
+    axios.post("https://api.marsview.ai/cb/v1/auth/create_access_token", {
+      apiKey: req.body.apiKey,
+      apiSecret: req.body.apiSecret,
+      userId: req.body.userId
+    }, config).then(response => {
+      if (response.data.status) {
+        res.json({
+          status: true,
+          token: response.data.data.accessToken
+        })
 
-io.on('connection', function (client) {
-  console.log('Client Connected to server');
+        authParams.token = response.data.data.accessToken;
+      } else {
+        res.json(response.data)
+      }
+    })
+  }
+})
+
+app.post('/get_credentials', function (req, res) {
+  if (req.body) {
+    // Post request configurations
+    let config = {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + authParams.token
+      }
+    }
+    axios.post("https://streams.marsview.ai/rb/v1/streams/setup_realtime_stream", {
+      channels: req.body.channelNumber
+    }, config).then(response => {
+      if (response.data.status) {
+        txnIdTemp = response.data.data.txnId;
+        channelIdTemp = response.data.data.channels[0].channelId;
+        res.json(response.data)
+      } else {
+        res.json(response.data)
+      }
+    })
+  }
+})
+
+app.put("/set_credentials", function (req, res) {
+  let model_configs = {
+    'intent_analysis': {
+      'intents':
+        ["intent-bxllq2f7hpkrvtyzi3-1627981197627",
+          "intent-bxllq2f7hpkrvtzlkf-1627981226223"]
+    }
+  }
+  authParams.txnId = txnIdTemp;
+  authParams.channelId = channelIdTemp;
+  authParams.modelConfigs = model_configs;
+  // Initialize mv_io_client object
+  mv_io_client = ioClient.connect('https://streams.marsview.ai/', {
+    auth: authParams
+  }); // Marsview Realtime Server
+  initializeListeners();
+  res.json({
+    status: true
+  });
+})
+
+
+// Socket io connections
+io.on('connection', function (clientLocal) {
+  client = clientLocal;
+  console.log("Client connected");
   let absolute_start_time = new Date().getSeconds();
   let recognizeStream = null;
   let chunkMap = {}
@@ -57,13 +134,12 @@ io.on('connection', function (client) {
   });
 
   client.on('messages', function (data) {
+    console.log("Geetiing messages")
     client.emit('broad', data);
   });
+});
 
-  mv_io_client.on('messages', function (data) {
-    client.emit('messages', data);
-  });
-
+function initializeListeners() {
   client.on('startStream', function (data) {
     mv_io_client.emit('startStream', data)
   });
@@ -74,6 +150,10 @@ io.on('connection', function (client) {
 
   client.on('binaryData', function (data) {
     mv_io_client.emit('binaryData', data)
+  });
+  mv_io_client.on('messages', function (data) {
+    console.log("Getting messages")
+    client.emit('messages', data);
   });
 
   mv_io_client.on('valid-token', function (data) {
@@ -88,8 +168,7 @@ io.on('connection', function (client) {
   mv_io_client.on('output', function (sentiment) {
     client.emit('output', sentiment)
   });
-
-});
+}
 
 
 // The encoding of the audio file, e.g. 'LINEAR16'
@@ -112,10 +191,6 @@ const request = {
   },
   interimResults: true, // If you want interim results, set this to true
 };
-
-
-
-
 
 // =========================== START SERVER ================================ //
 
