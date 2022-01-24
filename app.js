@@ -99,6 +99,13 @@ app.post('/get_credentials', function (req, res) {
 })
 
 app.put("/set_credentials", function (req, res) {
+  let model_configs = {
+    'intent_analysis': {
+      'intents':
+        ["intent-bxllq2f7hpkrvtyzi3-1627981197627",
+          "intent-bxllq2f7hpkrvtzlkf-1627981226223"]
+    }
+  }
   authParams.txnId = txnIdTemp;
   authParams.channelId = channelIdTemp;
   // Initialize mv_io_client object
